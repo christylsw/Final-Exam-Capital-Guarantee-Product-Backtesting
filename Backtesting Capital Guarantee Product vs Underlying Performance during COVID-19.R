@@ -3,18 +3,18 @@ library("quantmod")
 
 #########################################################################################################
 #Write a Backtesting Function 
-#to compare the return of Capital Guarantee Note vs Underlying during COVID-19 (period: 2019-09-27 - 2020-03-27)
+#to compare the return of Capital Guarantee Product (Principal Guarantee Note) vs Underlying during COVID-19 (period: 2019-09-27 - 2020-03-27)
 backtesting_function <- function (stock_data){
   notional <- 100
-  rf <- 0.0012
+  r <- 0.0012
+  TTM <- 0.5
   relative_price <- stock_data[[2,1]]/stock_data[[1,1]]*100
 
-  
   underlying_price <- relative_price
-  underlying_price_return <- underlying_price/notional - 1
+  underlying_price_return <- underlying_price/notional - 1 #Return of underlying
 
-  principal_guarantee_note_CF <- 100 + max((relative_price-100)*(100-100*exp(-rf*0.5)),0)
-  principal_guarantee_note_return <- principal_guarantee_note_CF/100 - 1
+  principal_guarantee_note_CF <- 100 + max((relative_price-100)*(100-100*exp(-r*TTM)),0) #Final Payoff of Principal Guarantee Note
+  principal_guarantee_note_return <- principal_guarantee_note_CF/100 - 1 #Return of Principal Guarantee Note
   
   print(underlying_price_return) #Print return of Fixed-coupon note
   print(principal_guarantee_note_return) #Print return of Principal guarantee note
